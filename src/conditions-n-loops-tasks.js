@@ -181,8 +181,19 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  let left = 0;
+  let right = str.length - 1;
+
+  while (left < right) {
+    if (str[left] !== str[right]) {
+      return false;
+    }
+    left += 1;
+    right -= 1;
+  }
+
+  return true;
 }
 
 /**
@@ -389,8 +400,52 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  function singleShuffle(input) {
+    const { length } = input;
+    const evenChars = new Array(length);
+    const oddChars = new Array(length);
+    let evenIndex = 0;
+    let oddIndex = 0;
+
+    for (let i = 0; i < length; i += 1) {
+      if (i % 2 === 0) {
+        evenChars[evenIndex] = input[i];
+        evenIndex += 1;
+      } else {
+        oddChars[oddIndex] = input[i];
+        oddIndex += 1;
+      }
+    }
+
+    let result = '';
+    for (let i = 0; i < evenIndex; i += 1) {
+      result += evenChars[i];
+    }
+    for (let i = 0; i < oddIndex; i += 1) {
+      result += oddChars[i];
+    }
+
+    return result;
+  }
+
+  const seen = new Map();
+  let current = str;
+  for (let i = 0; i < iterations; i += 1) {
+    if (seen.has(current)) {
+      const cycleStart = seen.get(current);
+      const cycleLength = i - cycleStart;
+      const remainingIterations = (iterations - i) % cycleLength;
+      for (let j = 0; j < remainingIterations; j += 1) {
+        current = singleShuffle(current);
+      }
+      return current;
+    }
+    seen.set(current, i);
+    current = singleShuffle(current);
+  }
+
+  return current;
 }
 
 /**
@@ -410,8 +465,64 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let temp = number;
+  while (temp > 0) {
+    digits.unshift(temp % 10);
+    temp = Math.floor(temp / 10);
+  }
+
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i < 0) return number;
+
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  const tempSwap = digits[i];
+  digits[i] = digits[j];
+  digits[j] = tempSwap;
+
+  const left = [];
+  for (let k = 0; k <= i; k += 1) {
+    left.push(digits[k]);
+  }
+
+  const right = [];
+  for (let k = i + 1; k < digits.length; k += 1) {
+    right.push(digits[k]);
+  }
+
+  for (let m = 0; m < right.length; m += 1) {
+    for (let n = m + 1; n < right.length; n += 1) {
+      if (right[m] > right[n]) {
+        const tempRight = right[m];
+        right[m] = right[n];
+        right[n] = tempRight;
+      }
+    }
+  }
+
+  const resultDigits = [];
+  for (let k = 0; k < left.length; k += 1) {
+    resultDigits.push(left[k]);
+  }
+  for (let k = 0; k < right.length; k += 1) {
+    resultDigits.push(right[k]);
+  }
+
+  let result = 0;
+  for (let k = 0; k < resultDigits.length; k += 1) {
+    result = result * 10 + resultDigits[k];
+  }
+
+  return result;
 }
 
 module.exports = {
