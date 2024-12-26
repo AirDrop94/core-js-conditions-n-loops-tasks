@@ -361,8 +361,41 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(inputMatrix) {
+  if (
+    typeof inputMatrix !== 'object' ||
+    inputMatrix === null ||
+    !inputMatrix.length ||
+    typeof inputMatrix[0] !== 'object'
+  ) {
+    throw new Error('Invalid matrix: must be a non-empty 2D array');
+  }
+
+  const n = inputMatrix.length;
+
+  for (let i = 0; i < n; i += 1) {
+    if (typeof inputMatrix[i] !== 'object' || inputMatrix[i].length !== n) {
+      throw new Error('Invalid matrix: must be square');
+    }
+  }
+
+  const matrix = inputMatrix;
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = i + 1; j < n; j += 1) {
+      const temp = matrix[i][j];
+      matrix[i][j] = matrix[j][i];
+      matrix[j][i] = temp;
+    }
+  }
+
+  for (let i = 0; i < n; i += 1) {
+    for (let j = 0; j < Math.floor(n / 2); j += 1) {
+      const temp = matrix[i][j];
+      matrix[i][j] = matrix[i][n - j - 1];
+      matrix[i][n - j - 1] = temp;
+    }
+  }
 }
 
 /**
