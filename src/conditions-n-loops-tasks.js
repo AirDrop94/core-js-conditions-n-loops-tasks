@@ -165,8 +165,71 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  let result = '';
+  const modifiedNumberStr = numberStr;
+  let i = 0;
+
+  if (modifiedNumberStr[0] === '-') {
+    result += 'minus ';
+    i = 1;
+  }
+
+  while (i < modifiedNumberStr.length) {
+    const char = modifiedNumberStr[i];
+
+    switch (char) {
+      case '0':
+        result += 'zero ';
+        break;
+      case '1':
+        result += 'one ';
+        break;
+      case '2':
+        result += 'two ';
+        break;
+      case '3':
+        result += 'three ';
+        break;
+      case '4':
+        result += 'four ';
+        break;
+      case '5':
+        result += 'five ';
+        break;
+      case '6':
+        result += 'six ';
+        break;
+      case '7':
+        result += 'seven ';
+        break;
+      case '8':
+        result += 'eight ';
+        break;
+      case '9':
+        result += 'nine ';
+        break;
+      case '.':
+      case ',':
+        result += 'point ';
+        break;
+      default:
+        break;
+    }
+    i += 1;
+  }
+
+  let trimmedResult = '';
+  let j = result.length - 1;
+  while (j >= 0 && result[j] === ' ') {
+    j -= 1;
+  }
+
+  for (let k = 0; k <= j; k += 1) {
+    trimmedResult += result[k];
+  }
+
+  return trimmedResult;
 }
 
 /**
@@ -412,8 +475,37 @@ function rotateMatrix(inputMatrix) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  function partition(array, low, high) {
+    const pivot = array[high];
+    const localArray = array;
+    let i = low - 1;
+
+    for (let j = low; j < high; j += 1) {
+      if (localArray[j] <= pivot) {
+        i += 1;
+        const temp = localArray[i];
+        localArray[i] = localArray[j];
+        localArray[j] = temp;
+      }
+    }
+
+    const temp = localArray[i + 1];
+    localArray[i + 1] = localArray[high];
+    localArray[high] = temp;
+    return i + 1;
+  }
+
+  function quickSort(array, low, high) {
+    if (low < high) {
+      const pi = partition(array, low, high);
+      quickSort(array, low, pi - 1);
+      quickSort(array, pi + 1, high);
+    }
+  }
+
+  quickSort(arr, 0, arr.length - 1);
+  return arr;
 }
 
 /**
